@@ -3,13 +3,11 @@ package cl.ucm.coffee.web.controller;
 
 import cl.ucm.coffee.persitence.entity.CoffeeEntity;
 import cl.ucm.coffee.service.ICoffeeService;
-import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.*;
 
 @RestController
@@ -18,19 +16,6 @@ public class CoffeeController {
 
     @Autowired
     private ICoffeeService coffeeService;
-
-    @GetMapping("/list")
-    public ResponseEntity<Map<String, String>> coffes(){
-        Map map = new HashMap();
-        map.put("coffee", "Coffees :Get)");
-        return ResponseEntity.ok(map);
-    }
-    @PostMapping("/save")
-    public ResponseEntity<Map<String, String>> coffe(){
-        Map map = new HashMap();
-        map.put("coffee", "Coffees Post:)");
-        return ResponseEntity.ok(map);
-    }
 
     @GetMapping("/coffees")
     public ResponseEntity<?> coffees(){
@@ -47,7 +32,7 @@ public class CoffeeController {
             coffeeEntity.setName(name);
             coffeeEntity.setPrice(price);
             coffeeEntity.setDescription(description);
-            coffeeEntity.setImage64(Base64.getEncoder().encodeToString(foto.getBytes()));
+            coffeeEntity.setImage64(foto.getBytes());
 
             CoffeeEntity savedCoffee = coffeeService.save(coffeeEntity);
             return ResponseEntity.ok(savedCoffee);
@@ -77,7 +62,7 @@ public class CoffeeController {
                 return ResponseEntity.status(404).build();
             }
         } catch (Exception e){
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(500).build();
         }
     }
 
@@ -92,7 +77,7 @@ public class CoffeeController {
             updatedCoffee.setName(name);
             updatedCoffee.setPrice(price);
             updatedCoffee.setDescription(description);
-            updatedCoffee.setImage64(Base64.getEncoder().encodeToString(foto.getBytes()));
+            updatedCoffee.setImage64(foto.getBytes());
 
             Optional<CoffeeEntity> resultado = coffeeService.updateCoffee(id_coffee, updatedCoffee);
             return ResponseEntity.ok(Boolean.TRUE);

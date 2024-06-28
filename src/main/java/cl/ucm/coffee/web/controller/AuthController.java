@@ -1,6 +1,10 @@
 package cl.ucm.coffee.web.controller;
 
+import cl.ucm.coffee.persitence.entity.UserEntity;
+import cl.ucm.coffee.persitence.entity.UserRoleEntity;
+import cl.ucm.coffee.service.IUserService;
 import cl.ucm.coffee.service.dto.LoginDto;
+import cl.ucm.coffee.service.dto.RegistroDto;
 import cl.ucm.coffee.web.config.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -8,12 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,6 +26,9 @@ public class AuthController {
     private  AuthenticationManager authenticationManager;
     @Autowired
     private  JwtUtil jwtUtil;
+
+    @Autowired
+    private IUserService userService;
 
 //    @Autowired
 //    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
@@ -43,5 +49,18 @@ public class AuthController {
         map.put("token",jwt);
         return ResponseEntity.ok(map);
         //return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<?> registro(@RequestBody RegistroDto registroDto){
+        System.out.println("paso registro");
+       UserEntity userEntity= userService.crearUsuario(registroDto);
+
+        return ResponseEntity.ok(userEntity);
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<?> buscar() {
+        return ResponseEntity.ok(userService.listarUsuarios());
     }
 }
