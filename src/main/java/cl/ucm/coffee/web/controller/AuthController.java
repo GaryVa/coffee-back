@@ -1,23 +1,22 @@
 package cl.ucm.coffee.web.controller;
 
 import cl.ucm.coffee.persitence.entity.UserEntity;
-import cl.ucm.coffee.persitence.entity.UserRoleEntity;
 import cl.ucm.coffee.service.IUserService;
 import cl.ucm.coffee.service.dto.LoginDto;
 import cl.ucm.coffee.service.dto.RegistroDto;
+import cl.ucm.coffee.service.dto.UserUpdateDto;
 import cl.ucm.coffee.web.config.JwtUtil;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -54,7 +53,7 @@ public class AuthController {
     @PostMapping("/create")
     public ResponseEntity<?> registro(@RequestBody RegistroDto registroDto){
         System.out.println("paso registro");
-       UserEntity userEntity= userService.crearUsuario(registroDto);
+        UserEntity userEntity= userService.crearUsuario(registroDto);
 
         return ResponseEntity.ok(userEntity);
     }
@@ -62,5 +61,16 @@ public class AuthController {
     @GetMapping("/buscar")
     public ResponseEntity<?> buscar() {
         return ResponseEntity.ok(userService.listarUsuarios());
+    }
+
+    @PutMapping("/bloquear")
+    public ResponseEntity<?> bloquear(@RequestBody UserUpdateDto userUpdateDto) {
+
+        try {
+            Optional<UserEntity> resultado = userService.updateUser(userUpdateDto);
+            return ResponseEntity.ok(Boolean.TRUE);
+        } catch (Exception e){
+            return ResponseEntity.status(404).build();
+        }
     }
 }
