@@ -2,6 +2,7 @@ package cl.ucm.coffee.service;
 
 import cl.ucm.coffee.persitence.entity.CoffeeEntity;
 import cl.ucm.coffee.persitence.repository.CoffeeRepository;
+import cl.ucm.coffee.service.dto.CoffeUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,14 +43,13 @@ public class CoffeeService implements ICoffeeService{
     }
 
     @Override
-    public Optional<CoffeeEntity> updateCoffee(Integer id, CoffeeEntity updatedCoffee) {
-        Optional<CoffeeEntity> existeCoffee = repository.findById(id);
+    public Optional<CoffeeEntity> updateCoffee(CoffeUpdateDto coffeUpdateDto) {
+        Optional<CoffeeEntity> existeCoffee = repository.findById(coffeUpdateDto.getId_coffee());
         if (existeCoffee.isPresent()){
             CoffeeEntity coffeeEntity = existeCoffee.get();
-            coffeeEntity.setName(updatedCoffee.getName());
-            coffeeEntity.setPrice(updatedCoffee.getPrice());
-            coffeeEntity.setDescription(updatedCoffee.getDescription());
-            coffeeEntity.setImage64(updatedCoffee.getImage64());
+            coffeeEntity.setName(coffeUpdateDto.getName());
+            coffeeEntity.setPrice(coffeUpdateDto.getPrice());
+            coffeeEntity.setDescription(coffeUpdateDto.getDescription());
             return Optional.of(repository.save(coffeeEntity));
         }else {
             return Optional.empty();

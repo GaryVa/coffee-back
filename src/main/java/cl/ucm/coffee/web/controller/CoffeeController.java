@@ -3,6 +3,7 @@ package cl.ucm.coffee.web.controller;
 
 import cl.ucm.coffee.persitence.entity.CoffeeEntity;
 import cl.ucm.coffee.service.ICoffeeService;
+import cl.ucm.coffee.service.dto.CoffeUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -67,19 +68,9 @@ public class CoffeeController {
     }
 
     @PutMapping("/coffee/update")
-    public ResponseEntity<?> updateCoffee(@RequestParam(name="id_coffee") Integer id_coffee,
-                                          @RequestParam(name="name") String name,
-                                          @RequestParam(name="price") Integer price,
-                                          @RequestParam(name="desc")String description,
-                                          @RequestParam(name="foto") MultipartFile foto) {
+    public ResponseEntity<?> updateCoffee(@RequestBody CoffeUpdateDto coffeUpdateDto) {
         try {
-            CoffeeEntity updatedCoffee = new CoffeeEntity();
-            updatedCoffee.setName(name);
-            updatedCoffee.setPrice(price);
-            updatedCoffee.setDescription(description);
-            updatedCoffee.setImage64(foto.getBytes());
-
-            Optional<CoffeeEntity> resultado = coffeeService.updateCoffee(id_coffee, updatedCoffee);
+            coffeeService.updateCoffee(coffeUpdateDto);
             return ResponseEntity.ok(Boolean.TRUE);
         } catch (Exception e) {
             return ResponseEntity.status(404).build();
