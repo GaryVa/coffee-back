@@ -44,7 +44,7 @@ public class CoffeeController {
     }
 
     @GetMapping("/coffee/buscar")
-    public ResponseEntity<?> findByName(@RequestParam(name="name") String name){
+    public ResponseEntity<?> findByName(String name){
         try {
             List<CoffeeEntity> coffees = coffeeService.findByName(name);
             return ResponseEntity.ok(coffees);
@@ -54,7 +54,7 @@ public class CoffeeController {
     }
 
     @DeleteMapping("/coffee/delete")
-    public ResponseEntity<?> deleteCoffee(@RequestParam(name="id_coffee") Integer id_coffee){
+    public ResponseEntity<?> deleteCoffee(Integer id_coffee){
         try {
             boolean deleted = coffeeService.deleteCoffeeById(id_coffee);
             if(deleted) {

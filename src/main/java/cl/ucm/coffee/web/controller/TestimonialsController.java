@@ -20,12 +20,7 @@ public class TestimonialsController {
     @PostMapping("/ingresar")
     public ResponseEntity<?> saveTestimonials(@RequestBody TestimonioDto testimonioDto){
         try {
-            TestimonialsEntity testimonialsEntity = new TestimonialsEntity();
-            testimonialsEntity.setIdCoffee(testimonioDto.getIdCoffee());
-            testimonialsEntity.setTestimonial(testimonioDto.getTestimonials());
-            testimonialsEntity.setUsername(testimonioDto.getUsername());
-
-            TestimonialsEntity saveTestimonials = testimonialsService.save(testimonialsEntity);
+            TestimonialsEntity saveTestimonials = testimonialsService.save(testimonioDto);
             return ResponseEntity.ok(saveTestimonials);
         } catch (Exception e) {
             return ResponseEntity.status(404).body("Error: "+ e.getMessage());
@@ -34,7 +29,7 @@ public class TestimonialsController {
     }
 
     @GetMapping("/buscar")
-    public ResponseEntity<?> findByIdCoffee(@RequestParam(name="id_coffee") Integer Id_coffee){
+    public ResponseEntity<?> findByIdCoffee(Integer Id_coffee){
         try{
             List<TestimonialsEntity> testimonials = testimonialsService.findByIdCoffee((Id_coffee));
             return ResponseEntity.ok(testimonials);
